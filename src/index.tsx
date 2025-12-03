@@ -1,5 +1,9 @@
-export default {
-  multiply(a: number, b: number) {
-    return Promise.resolve(a * b);
-  },
-};
+export * from './taAnalytics';
+export * from './config';
+export * from './constants';
+export * from './models';
+export * from './storage';
+export * from './logger';
+export * from './adaptors/console';
+export * from './adaptors/event-emitter';
+export * from './storage';
