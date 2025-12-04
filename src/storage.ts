@@ -1,3 +1,5 @@
+import { TALogger } from './logger';
+
 type AsyncStorageType = typeof import('@react-native-async-storage/async-storage').default;
 
 export interface StorageAdapter {
@@ -55,6 +57,7 @@ export class AsyncStorageAdapter implements StorageAdapter {
 }
 
 let asyncStorageModule: AsyncStorageType | null = null;
+let warnedAboutAsyncStorageFallback = false;
 try {
   // Optional dependency: if unavailable (e.g. in tests), this stays null.
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -63,7 +66,16 @@ try {
   asyncStorageModule = null;
 }
 
-export const createDefaultStorageAdapter = () =>
-  asyncStorageModule
+export const createDefaultStorageAdapter = () => {
+  if (!asyncStorageModule && !warnedAboutAsyncStorageFallback) {
+    warnedAboutAsyncStorageFallback = true;
+    TALogger.log(
+      "AsyncStorage not available; using in-memory storage (counters reset each app start). Install '@react-native-async-storage/async-storage' as an app dependency or provide a custom StorageAdapter to persist data.",
+      'warn'
+    );
+  }
+
+  return asyncStorageModule
     ? new AsyncStorageAdapter(asyncStorageModule)
     : new MemoryStorageAdapter();
+};

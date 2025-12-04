@@ -5,8 +5,9 @@ React Native port of the `TAAnalytics` Swift SDK: an opinionated analytics orche
 ## Installation
 
 ```sh
-npm install react-native-ta-analytics
+npm install react-native-ta-analytics @react-native-async-storage/async-storage
 ```
+> AsyncStorage must be in your app's `package.json` for React Native autolinking. Without it, the SDK falls back to in-memory storage and counters reset every cold start.
 
 ## Quick start
 
@@ -83,7 +84,7 @@ You can implement your own adaptor by conforming to `AnalyticsAdaptor` (`startFo
 
 ## Storage
 
-A simple in-memory store ships by default, but if `@react-native-async-storage/async-storage` is available it will be used automatically. You can inject your own `StorageAdapter` (wrapping AsyncStorage, MMKV, etc.) to persist lifetime counters and user properties across launches.
+A simple in-memory store ships by default, but if `@react-native-async-storage/async-storage` is available it will be used automatically. Add it directly to your app (RN autolinking only scans your app's `package.json`) or inject your own `StorageAdapter` (wrapping AsyncStorage, MMKV, etc.) to persist lifetime counters and user properties across launches.
 
 ## Scripts
 

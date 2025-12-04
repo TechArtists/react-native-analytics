@@ -154,6 +154,42 @@ it('applies prefixes differently for internal vs manual events', async () => {
   expect(names).toContain('manual_custom');
 });
 
+it('increments cold launch count across app starts when storage persists', async () => {
+  const sharedStorage = new MemoryStorageAdapter();
+
+  const firstAdaptor = new TestAdaptor();
+  const analyticsFirstRun = new TAAnalytics(
+    new TAAnalyticsConfig({
+      analyticsVersion: '1.0',
+      adaptors: [firstAdaptor],
+      storage: sharedStorage,
+      enableAppLifecycleEvents: false,
+    })
+  );
+
+  await analyticsFirstRun.start();
+  const firstColdLaunch = firstAdaptor.setCalls.find(
+    (call) => call.userProperty.rawValue === 'app_cold_launch_count'
+  );
+  expect(firstColdLaunch?.value).toBe('1');
+
+  const secondAdaptor = new TestAdaptor();
+  const analyticsSecondRun = new TAAnalytics(
+    new TAAnalyticsConfig({
+      analyticsVersion: '1.0',
+      adaptors: [secondAdaptor],
+      storage: sharedStorage,
+      enableAppLifecycleEvents: false,
+    })
+  );
+
+  await analyticsSecondRun.start();
+  const secondColdLaunch = secondAdaptor.setCalls.find(
+    (call) => call.userProperty.rawValue === 'app_cold_launch_count'
+  );
+  expect(secondColdLaunch?.value).toBe('2');
+});
+
 it('propagates userID to adaptors that support it', async () => {
   const adaptor = new UserIdAdaptor();
   const analytics = new TAAnalytics(

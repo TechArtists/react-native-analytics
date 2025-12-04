@@ -61,9 +61,9 @@ export default function App() {
       <Text>Status: {status}</Text>
       <Button
         onPress={handleButtonTap}
-        title="Test Analytics"
+        title="Test TA Analytics Example App"
         color="#841584"
-        accessibilityLabel="Test Analytics"
+        accessibilityLabel="Test TA Analytics Example App"
       />
     </View>
   );
