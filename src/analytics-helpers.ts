@@ -18,7 +18,7 @@ export const isReadWriteUserIDAdaptor = (
 ): adaptor is AnalyticsAdaptorWithReadWriteUserID =>
   typeof (adaptor as any).getUserID === 'function' &&
   typeof (adaptor as any).setUserID === 'function';
-
+jjj
 export const isWriteOnlyUserIDAdaptor = (
   adaptor: AnalyticsAdaptor
 ): adaptor is AnalyticsAdaptorWithWriteOnlyUserID =>

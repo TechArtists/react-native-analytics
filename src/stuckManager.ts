@@ -1,6 +1,6 @@
 import { TALogger } from './logger';
-import { AnalyticsParams} from './models';
-import { TAAnalytics } from './taAnalytics';
+import type { AnalyticsParams } from './models';
+import type { TAAnalytics } from './taAnalytics';
 
 export class StuckUIManager {
   private waitingForCorrectionAfterStuckStartDate?: number;
