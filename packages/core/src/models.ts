@@ -82,7 +82,11 @@ export class SecondaryViewAnalyticsModel {
   ) {}
 }
 
-export type InstallType = 'AppStore' | 'Xcode' | 'XcodeAndDebuggerAttached' | 'TestFlight';
+export type InstallType =
+  | 'AppStore'
+  | 'Xcode'
+  | 'XcodeAndDebuggerAttached'
+  | 'TestFlight';
 
 export type ProcessType = 'app' | 'appExtension';
 
@@ -96,9 +100,7 @@ export interface AnalyticsProvider {
     userProperty: UserPropertyAnalyticsModel,
     value: string | null
   ): Promise<void>;
-  get(
-    userProperty: UserPropertyAnalyticsModel
-  ): Promise<string | undefined>;
+  get(userProperty: UserPropertyAnalyticsModel): Promise<string | undefined>;
 }
 
 export interface AnalyticsStartOptions {
@@ -108,19 +110,39 @@ export interface AnalyticsStartOptions {
 
 // Adaptors forward trimmed events/user properties to a destination.
 export interface AnalyticsAdaptor {
+  /**
+   * Starts the adaptor with install context and a reference back to the orchestrator.
+   * Implementations should keep the reference weakly and only use it after start resolves.
+   */
   startFor(options: AnalyticsStartOptions): Promise<void>;
+  /**
+   * Logs an event; implementations must assume the event name has already been trimmed.
+   */
   track(
     trimmedEvent: EventAnalyticsModelTrimmed,
     params?: AnalyticsParams
   ): void;
+  /**
+   * Sets or clears a user property; implementations must assume the property has already been trimmed.
+   */
   set(
     trimmedUserProperty: UserPropertyAnalyticsModelTrimmed,
     value: string | null
   ): void;
+  /**
+   * Adaptor-specific event trimming that should enforce destination limits before track is called.
+   */
   trimEvent(event: EventAnalyticsModel): EventAnalyticsModelTrimmed;
+  /**
+   * Adaptor-specific user property trimming that should enforce destination limits before set is called.
+   */
   trimUserProperty(
     userProperty: UserPropertyAnalyticsModel
   ): UserPropertyAnalyticsModelTrimmed;
+  /**
+   * Exposes the underlying destination client (e.g., Mixpanel instance) when available.
+   */
+  readonly wrappedValue?: unknown;
   readonly name?: string;
 }
 
@@ -130,8 +152,7 @@ export interface AnalyticsAdaptorWithReadOnlyUserPseudoID
   getUserPseudoID(): string | undefined;
 }
 
-export interface AnalyticsAdaptorWithWriteOnlyUserID
-  extends AnalyticsAdaptor {
+export interface AnalyticsAdaptorWithWriteOnlyUserID extends AnalyticsAdaptor {
   setUserID(userID: string | null): void;
 }
 
@@ -145,12 +166,7 @@ export type TrackEventFilter = (
   params?: AnalyticsParamsWithNil
 ) => boolean;
 
-export type SignupMethod =
-  | 'email'
-  | 'apple'
-  | 'google'
-  | 'facebook'
-  | string;
+export type SignupMethod = 'email' | 'apple' | 'google' | 'facebook' | string;
 
 export type PaywallExitReason =
   | 'closed paywall'

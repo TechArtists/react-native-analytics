@@ -6,10 +6,22 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start"
+    "start": "react-native start",
+    "build": "echo \"no build for example\"",
+    "prepare": "echo \"no prepare for example\"",
+    "lint": "echo \"no lint for example\"",
+    "test": "echo \"no tests for example\"",
+    "typescript": "echo \"no typescript for example\""
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-firebase/analytics": "^18.9.0",
+    "@react-native-firebase/app": "^18.9.0",
+    "@react-native-firebase/crashlytics": "^18.9.0",
+    "@react-native-ta-analytics/adaptor-firebase": "0.1.0",
+    "@react-native-ta-analytics/adaptor-mixpanel": "0.1.0",
+    "mixpanel-react-native": "^3.1.2",
+    "react-native-ta-analytics": "0.1.0",
     "react": "18.2.0",
     "react-native": "0.72.6"
   },

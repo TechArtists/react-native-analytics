@@ -1,6 +1,7 @@
 import { TALogger } from './logger';
 
-type AsyncStorageType = typeof import('@react-native-async-storage/async-storage').default;
+type AsyncStorageType =
+  typeof import('@react-native-async-storage/async-storage').default;
 
 export interface StorageAdapter {
   getItem(key: string): Promise<string | null>;
@@ -60,8 +61,8 @@ let asyncStorageModule: AsyncStorageType | null = null;
 let warnedAboutAsyncStorageFallback = false;
 try {
   // Optional dependency: if unavailable (e.g. in tests), this stays null.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  asyncStorageModule = require('@react-native-async-storage/async-storage').default;
+  asyncStorageModule =
+    require('@react-native-async-storage/async-storage').default;
 } catch {
   asyncStorageModule = null;
 }

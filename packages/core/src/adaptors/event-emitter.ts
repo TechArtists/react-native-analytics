@@ -26,8 +26,12 @@ export class EventEmitterAdaptor implements AnalyticsAdaptor {
   readonly events = new SimpleEventEmitter<EventAnalyticsModelTrimmed>();
   readonly userProperties =
     new SimpleEventEmitter<UserPropertyAnalyticsModelTrimmed>();
+  readonly wrappedValue = {
+    events: this.events,
+    userProperties: this.userProperties,
+  };
 
-  async startFor(_: AnalyticsStartOptions): Promise<void> {
+  async startFor(_: AnalyticsStartOptions) {
     return;
   }
 

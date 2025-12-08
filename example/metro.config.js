@@ -1,12 +1,14 @@
 const path = require('path');
-const escape = require('escape-string-regexp');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
 const {getDefaultConfig} = require('@react-native/metro-config');
-const pak = require('../package.json');
+const analytics = require('../packages/core/package.json');
+const firebase = require('../packages/analytics-firebase/package.json');
+const mixpanel = require('../packages/analytics-mixpanel/package.json');
 
 const root = path.resolve(__dirname, '..');
 const modules = Object.keys({
-  ...pak.peerDependencies,
+  ...(analytics.peerDependencies || {}),
+  ...(firebase.peerDependencies || {}),
+  ...(mixpanel.peerDependencies || {}),
 });
 
 const config = getDefaultConfig(__dirname);
@@ -17,14 +19,9 @@ module.exports = {
   watchFolders: [root],
   resolver: {
     ...config.resolver,
-    // We need to make sure that only one version is loaded for peerDependencies
-    blockList: exclusionList(
-      modules.map(
-        m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
-      ),
-    ),
+    // Resolve hoisted workspace deps from the monorepo root.
     extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
+      acc[name] = path.join(root, 'node_modules', name);
       return acc;
     }, {}),
   },

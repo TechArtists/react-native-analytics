@@ -32,7 +32,11 @@ export class StuckUIManager {
       ([key, value]) => (params[`view_${key}`] = value)
     );
     params.duration = this.initialDelaySeconds;
-    await this.analytics.trackErrorEvent(StuckUIManager.REASON, undefined, params);
+    await this.analytics.trackErrorEvent(
+      StuckUIManager.REASON,
+      undefined,
+      params
+    );
     this.markCorrectionStart();
   }
 
@@ -54,10 +58,8 @@ export class StuckUIManager {
       ([key, value]) => (params[`view_${key}`] = value)
     );
     params.duration = this.initialDelaySeconds + elapsedSeconds;
-    void this.analytics.trackErrorCorrectedEvent(
-      StuckUIManager.REASON,
-      undefined,
-      params
-    );
+    this.analytics
+      .trackErrorCorrectedEvent(StuckUIManager.REASON, undefined, params)
+      .catch(() => undefined);
   }
 }

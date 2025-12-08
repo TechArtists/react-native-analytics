@@ -12,8 +12,9 @@ import { trimString } from '../utils';
 
 export class ConsoleAnalyticsAdaptor implements AnalyticsAdaptor {
   readonly name = 'ConsoleAnalyticsAdaptor';
+  readonly wrappedValue = null;
 
-  async startFor(_: AnalyticsStartOptions): Promise<void> {
+  async startFor(_: AnalyticsStartOptions) {
     return;
   }
 
@@ -23,7 +24,9 @@ export class ConsoleAnalyticsAdaptor implements AnalyticsAdaptor {
   ): void {
     const paramsString = params ? formatParams(params) : '';
     TALogger.log(
-      `sendEvent '${trimmedEvent.rawValue}'${paramsString ? ` params [${paramsString}]` : ''}`,
+      `sendEvent '${trimmedEvent.rawValue}'${
+        paramsString ? ` params [${paramsString}]` : ''
+      }`,
       'info'
     );
   }
@@ -33,7 +36,9 @@ export class ConsoleAnalyticsAdaptor implements AnalyticsAdaptor {
     value: string | null
   ): void {
     TALogger.log(
-      `setUserProperty '${trimmedUserProperty.rawValue}' value '${value ?? '<nil>'}'`,
+      `setUserProperty '${trimmedUserProperty.rawValue}' value '${
+        value ?? '<nil>'
+      }'`,
       'info'
     );
   }

@@ -8,17 +8,40 @@ import {
   TAAnalyticsConfig,
   ViewAnalyticsModel,
 } from 'react-native-ta-analytics';
+import {
+  FirebaseAnalyticsAdaptor,
+  FirebaseCrashlyticsAdaptor,
+} from '@react-native-ta-analytics/adaptor-firebase';
+import { MixpanelAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-mixpanel';
 
+const MIXPANEL_TOKEN = ''; // set your Mixpanel token to enable the Mixpanel adaptor.
+const ENABLE_CRASHLYTICS = false; // flip to true after adding Firebase config to the example app.
 
 export default function App() {
   const [status, setStatus] = React.useState<string>('init');
   const analyticsRef = React.useRef<TAAnalytics | null>(null);
 
   React.useEffect(() => {
+    const adaptors = [new ConsoleAnalyticsAdaptor(), new MixpanelAnalyticsAdaptor("MIXPANEL_TOKEN")];
+    if (ENABLE_CRASHLYTICS) {
+      try {
+        adaptors.push(new FirebaseCrashlyticsAdaptor());
+      } catch (error) {
+        console.warn('Crashlytics adaptor not available:', error);
+      }
+    }
+    if (MIXPANEL_TOKEN) {
+      try {
+        adaptors.push(new MixpanelAnalyticsAdaptor(MIXPANEL_TOKEN));
+      } catch (error) {
+        console.warn('Mixpanel adaptor not available:', error);
+      }
+    }
+
     const analytics = new TAAnalytics(
       new TAAnalyticsConfig({
         analyticsVersion: '1.0',
-        adaptors: [new ConsoleAnalyticsAdaptor()],
+        adaptors,
         enableAppLifecycleEvents: false,
         appVersion: '1.0.0',
         buildNumber: '1',

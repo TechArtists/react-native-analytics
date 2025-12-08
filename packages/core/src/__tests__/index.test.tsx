@@ -17,14 +17,18 @@ import type {
 } from '..';
 
 class TestAdaptor implements AnalyticsAdaptor {
-  trackedEvents: { event: EventAnalyticsModelTrimmed; params?: AnalyticsParams }[] =
-    [];
-  setCalls: { userProperty: UserPropertyAnalyticsModelTrimmed; value: string | null }[] =
-    [];
+  trackedEvents: {
+    event: EventAnalyticsModelTrimmed;
+    params?: AnalyticsParams;
+  }[] = [];
+  setCalls: {
+    userProperty: UserPropertyAnalyticsModelTrimmed;
+    value: string | null;
+  }[] = [];
 
   name = 'TestAdaptor';
 
-  async startFor(_: AnalyticsStartOptions): Promise<void> {
+  async startFor(_: AnalyticsStartOptions) {
     return;
   }
 
@@ -51,14 +55,12 @@ class TestAdaptor implements AnalyticsAdaptor {
 }
 
 class UserIdAdaptor
-  implements
-    AnalyticsAdaptor,
-    AnalyticsAdaptorWithReadWriteUserID
+  implements AnalyticsAdaptor, AnalyticsAdaptorWithReadWriteUserID
 {
   name = 'UserIdAdaptor';
   trackedUserID: string | undefined;
 
-  async startFor(_: AnalyticsStartOptions): Promise<void> {
+  async startFor(_: AnalyticsStartOptions) {
     return;
   }
 
@@ -117,8 +119,16 @@ it('only logs once per lifetime for logOnlyOncePerLifetime', async () => {
   await analytics.start();
 
   const event = new EventAnalyticsModel('unique');
-  await analytics.track(event, undefined, EventLogCondition.LogOnlyOncePerLifetime);
-  await analytics.track(event, undefined, EventLogCondition.LogOnlyOncePerLifetime);
+  await analytics.track(
+    event,
+    undefined,
+    EventLogCondition.LogOnlyOncePerLifetime
+  );
+  await analytics.track(
+    event,
+    undefined,
+    EventLogCondition.LogOnlyOncePerLifetime
+  );
 
   const occurrences = adaptor.trackedEvents.filter(
     (item) => item.event.rawValue === 'unique'
@@ -206,4 +216,36 @@ it('propagates userID to adaptors that support it', async () => {
 
   expect(adaptor.trackedUserID).toBe('abc123');
   expect(analytics.userID).toBe('abc123');
+});
+
+it('persists and restores userID across analytics instances', async () => {
+  const sharedStorage = new MemoryStorageAdapter();
+
+  const firstAdaptor = new UserIdAdaptor();
+  const firstAnalytics = new TAAnalytics(
+    new TAAnalyticsConfig({
+      analyticsVersion: '1.0',
+      adaptors: [firstAdaptor],
+      storage: sharedStorage,
+      enableAppLifecycleEvents: false,
+    })
+  );
+  await firstAnalytics.start();
+  firstAnalytics.userID = 'persist-me';
+  // Allow async storage write to complete.
+  await new Promise((resolve) => setImmediate(resolve));
+
+  const secondAdaptor = new UserIdAdaptor();
+  const secondAnalytics = new TAAnalytics(
+    new TAAnalyticsConfig({
+      analyticsVersion: '1.0',
+      adaptors: [secondAdaptor],
+      storage: sharedStorage,
+      enableAppLifecycleEvents: false,
+    })
+  );
+  await secondAnalytics.start();
+
+  expect(secondAdaptor.trackedUserID).toBe('persist-me');
+  expect(secondAnalytics.userID).toBe('persist-me');
 });

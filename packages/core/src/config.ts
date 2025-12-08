@@ -75,7 +75,10 @@ export class TAAnalyticsConfig {
     this.analyticsVersion = options.analyticsVersion;
     this.adaptors = options.adaptors;
     this.currentProcessType = options.currentProcessType ?? 'app';
-    this.enabledProcessTypes = options.enabledProcessTypes ?? ['app', 'appExtension'];
+    this.enabledProcessTypes = options.enabledProcessTypes ?? [
+      'app',
+      'appExtension',
+    ];
     this.installType = options.installType ?? 'Xcode';
     this.storage = options.storage ?? createDefaultStorageAdapter();
     this.installUserProperties =
@@ -92,8 +95,7 @@ export class TAAnalyticsConfig {
     this.appVersion = options.appVersion;
     this.buildNumber = options.buildNumber;
     this.osVersion = options.osVersion;
-    this.enableAppLifecycleEvents =
-      options.enableAppLifecycleEvents !== false;
+    this.enableAppLifecycleEvents = options.enableAppLifecycleEvents !== false;
     this.installOverrides = options.installOverrides;
   }
 }

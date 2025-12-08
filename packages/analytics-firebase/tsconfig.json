@@ -2,7 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react-native-ta-analytics": ["./src/index"]
+      "@react-native-ta-analytics/adaptor-firebase": ["./src/index"],
+      "react-native-ta-analytics": ["../core/src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -24,5 +25,5 @@
     "strict": true,
     "target": "esnext"
   },
-  "exclude": ["node_modules", "lib", "example"]
+  "exclude": ["node_modules", "lib"]
 }

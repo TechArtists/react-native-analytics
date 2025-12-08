@@ -5,20 +5,24 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-# Boost's old download host occasionally serves a small HTML page instead of the archive.
-boost_podspec = File.join(__dir__, '..', 'node_modules', 'react-native', 'third-party-podspecs', 'boost.podspec')
-if File.exist?(boost_podspec)
-  boost_contents = File.read(boost_podspec)
-  boost_url = 'https://archives.boost.io/release/1.76.0/source/boost_1_76_0.tar.bz2'
-  unless boost_contents.include?(boost_url)
-    File.write(
-      boost_podspec,
-      boost_contents.sub('https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2', boost_url)
-    )
-  end
+# Ensure Boost podspec points at the stable mirror + checksum (works with hoisted deps too).
+boost_paths = [
+  File.join(__dir__, '..', 'node_modules', 'react-native', 'third-party-podspecs', 'boost.podspec'),
+  File.join(__dir__, '..', '..', 'node_modules', 'react-native', 'third-party-podspecs', 'boost.podspec'),
+]
+boost_url = 'https://archives.boost.io/release/1.76.0/source/boost_1_76_0.tar.bz2'
+boost_sha = 'f0397ba6e982c4450f27bf32a2a83292aba035b827a5623a14636ea583318c41'
+boost_paths.each do |boost_podspec|
+  next unless File.exist?(boost_podspec)
+  contents = File.read(boost_podspec)
+  updated = contents
+    .sub(%r{https://.*boost_1_76_0\.tar\.bz2}, boost_url)
+    .sub(/:sha256 => '[^']+'/, ":sha256 => '#{boost_sha}'")
+  File.write(boost_podspec, updated) if updated != contents
 end
 
 platform :ios, '15.0'
+use_modular_headers!
 prepare_react_native_project!
 
 flipper_config = FlipperConfiguration.disabled
@@ -62,5 +66,24 @@ target 'TaAnalyticsExample' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+    # Ensure pods use a modern deployment target and avoid Folly clockid_t redefinitions on newer SDKs.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+
+        next unless target.name == 'RCT-Folly'
+
+        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS].each do |flag_key|
+          flags = config.build_settings[flag_key]
+          flags = ['$(inherited)'] if flags.nil?
+          flags = flags.split(' ') if flags.is_a?(String)
+          unless flags.include?('-DFOLLY_HAVE_CLOCK_GETTIME=1')
+            flags << '-DFOLLY_HAVE_CLOCK_GETTIME=1'
+          end
+          config.build_settings[flag_key] = flags
+        end
+      end
+    end
   end
 end

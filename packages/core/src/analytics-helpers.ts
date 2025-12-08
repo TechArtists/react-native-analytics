@@ -27,7 +27,9 @@ export const isWriteOnlyUserIDAdaptor = (
 /**
  * Drop undefined/null params while preserving the rest.
  */
-export const filterNilParams = (params?: AnalyticsParamsWithNil): AnalyticsParams => {
+export const filterNilParams = (
+  params?: AnalyticsParamsWithNil
+): AnalyticsParams => {
   if (!params) {
     return {};
   }

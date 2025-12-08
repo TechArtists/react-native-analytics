@@ -67,8 +67,7 @@ export class EventBuffer {
       if (!deferredEvent) {
         continue;
       }
-      const elapsedSeconds =
-        (Date.now() - deferredEvent.dateAdded) / 1000;
+      const elapsedSeconds = (Date.now() - deferredEvent.dateAdded) / 1000;
       const params: AnalyticsParams = {
         ...(deferredEvent.params ?? {}),
         timeDelta: elapsedSeconds,

@@ -1,0 +1,65 @@
+{
+  "name": "@react-native-ta-analytics/adaptor-mixpanel",
+  "version": "0.1.0",
+  "description": "Mixpanel adaptor for react-native-ta-analytics.",
+  "license": "MIT",
+  "author": "Tataru Robert <robert.tataru98@gmail.com> (https://github.com/tataruRobert)",
+  "repository": "https://github.com/TechArtists/react-native-ta-analytics.git",
+  "bugs": {
+    "url": "https://github.com/TechArtists/react-native-ta-analytics.git/issues"
+  },
+  "homepage": "https://github.com/TechArtists/react-native-ta-analytics.git#readme",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib"
+  ],
+  "scripts": {
+    "build": "bob build",
+    "prepare": "bob build",
+    "typescript": "tsc --noEmit",
+    "lint": "echo \"no lint for analytics-mixpanel\"",
+    "test": "echo \"no tests for analytics-mixpanel\""
+  },
+  "keywords": [
+    "react-native",
+    "analytics",
+    "mixpanel",
+    "ta-analytics"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "mixpanel-react-native": ">=2.0.0",
+    "react-native": "*",
+    "react-native-ta-analytics": "^0.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "metro-react-native-babel-preset": "0.76.8",
+    "mixpanel-react-native": "^3.1.2",
+    "react-native-builder-bob": "^0.17.1",
+    "react-native-ta-analytics": "0.1.0",
+    "typescript": "^4.1.3"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  }
+}

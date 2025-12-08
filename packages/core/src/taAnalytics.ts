@@ -38,6 +38,7 @@ export interface StartOptions {
 }
 
 const STORAGE_KEY = 'TAAnalytics';
+const USER_ID_STORAGE_KEY = 'userID';
 
 export class TAAnalytics implements AnalyticsProvider {
   static readonly userdefaultsKeyPrefix = STORAGE_KEY;
@@ -55,16 +56,22 @@ export class TAAnalytics implements AnalyticsProvider {
 
   // Optional user identifiers exposed by adaptors (e.g., Crashlytics/Firebase).
   get userPseudoID(): string | undefined {
-    const adaptor = this.eventQueueBuffer.startedAdaptors.find(isReadOnlyPseudoIDAdaptor);
+    const adaptor = this.eventQueueBuffer.startedAdaptors.find(
+      isReadOnlyPseudoIDAdaptor
+    );
     return adaptor?.getUserPseudoID();
   }
 
   get userID(): string | undefined {
-    const adaptor = this.eventQueueBuffer.startedAdaptors.find(isReadWriteUserIDAdaptor);
+    const adaptor = this.eventQueueBuffer.startedAdaptors.find(
+      isReadWriteUserIDAdaptor
+    );
     return adaptor?.getUserID();
   }
 
   set userID(value: string | undefined) {
+    // Persist the last requested user id so we can restore it on next launch.
+    void this.setInStorage(USER_ID_STORAGE_KEY, value ?? null);
     this.eventQueueBuffer.startedAdaptors.forEach((adaptor) => {
       if (isWriteOnlyUserIDAdaptor(adaptor)) {
         adaptor.setUserID(value ?? null);
@@ -74,9 +81,7 @@ export class TAAnalytics implements AnalyticsProvider {
 
   private storageCache: Record<string, any> | null = null;
 
-  private appStateSubscription?:
-    | { remove: () => void }
-    | (() => void);
+  private appStateSubscription?: { remove: () => void } | (() => void);
   private isFirstAppOpenThisProcess = true;
 
   constructor(config: TAAnalyticsConfig) {
@@ -101,6 +106,7 @@ export class TAAnalytics implements AnalyticsProvider {
     // Bring adaptors up, populate defaults, then send any automatic events.
     this.logStartupDetails();
     await this.startAdaptors();
+    await this.restoreUserIDFromStorage();
     await this.configureUserProperties();
     await this.incrementColdLaunchCount();
     await this.sendAppVersionEventUpdatedIfNeeded();
@@ -228,7 +234,10 @@ export class TAAnalytics implements AnalyticsProvider {
     }
 
     this.lastViewShow = view;
-    await this.set(UserProperties.LAST_VIEW_SHOW, this.formatLastViewShow(view));
+    await this.set(
+      UserProperties.LAST_VIEW_SHOW,
+      this.formatLastViewShow(view)
+    );
     await this.track(Events.UI_VIEW_SHOW, params);
   }
 
@@ -242,7 +251,7 @@ export class TAAnalytics implements AnalyticsProvider {
     if (view.type) {
       params.secondary_view_type = view.type;
     }
-    
+
     this.addParametersForView(view.mainView, params, '');
 
     await this.track(Events.UI_VIEW_SHOW, params);
@@ -478,9 +487,11 @@ export class TAAnalytics implements AnalyticsProvider {
    */
   private logStartupDetails() {
     TALogger.log(
-      `Starting analytics installType='${this.config.installType}' processType='${this.config.currentProcessType}' enabledProcessTypes='${this.config.enabledProcessTypes.join(
-        ','
-      )}'`,
+      `Starting analytics installType='${
+        this.config.installType
+      }' processType='${
+        this.config.currentProcessType
+      }' enabledProcessTypes='${this.config.enabledProcessTypes.join(',')}'`,
       'info'
     );
   }
@@ -508,16 +519,17 @@ export class TAAnalytics implements AnalyticsProvider {
       const id = setTimeout(() => {
         clearTimeout(id);
         reject(
-          new Error(
-            `Timeout after ${this.config.maxTimeoutForAdaptorStart}ms`
-          )
+          new Error(`Timeout after ${this.config.maxTimeoutForAdaptorStart}ms`)
         );
       }, this.config.maxTimeoutForAdaptorStart);
     });
 
     try {
       await Promise.race([
-        adaptor.startFor({ installType: this.config.installType, analytics: this }),
+        adaptor.startFor({
+          installType: this.config.installType,
+          analytics: this,
+        }),
         timeoutPromise,
       ]);
       TALogger.log(
@@ -527,9 +539,9 @@ export class TAAnalytics implements AnalyticsProvider {
       return adaptor;
     } catch (error) {
       TALogger.log(
-        `Adaptor '${adaptor.name ?? adaptor.constructor.name}' failed to start: ${
-          (error as Error).message
-        }`,
+        `Adaptor '${
+          adaptor.name ?? adaptor.constructor.name
+        }' failed to start: ${(error as Error).message}`,
         'warn'
       );
       return null;
@@ -540,10 +552,14 @@ export class TAAnalytics implements AnalyticsProvider {
    * Seed core user properties such as analytics version and cold launch count.
    */
   private async configureUserProperties() {
-    await this.set(UserProperties.ANALYTICS_VERSION, this.config.analyticsVersion);
+    await this.set(
+      UserProperties.ANALYTICS_VERSION,
+      this.config.analyticsVersion
+    );
     const nextColdLaunchCount =
-      (await this.getNextCounterValueFrom(UserProperties.APP_COLD_LAUNCH_COUNT)) ??
-      1;
+      (await this.getNextCounterValueFrom(
+        UserProperties.APP_COLD_LAUNCH_COUNT
+      )) ?? 1;
     await this.set(
       UserProperties.APP_COLD_LAUNCH_COUNT,
       `${nextColdLaunchCount}`
@@ -644,9 +660,9 @@ export class TAAnalytics implements AnalyticsProvider {
         'change',
         (state: AppStateStatus) => {
           if (state === 'active') {
-            void this.handleAppBecameActive();
+            this.handleAppBecameActive().catch(() => undefined);
           } else if (state === 'background') {
-            void this.handleAppEnteredBackground();
+            this.handleAppEnteredBackground().catch(() => undefined);
           }
         }
       ) as unknown;
@@ -751,7 +767,10 @@ export class TAAnalytics implements AnalyticsProvider {
     const defaultsAppVersion = await this.stringFromStorage('appVersion');
     const defaultsBuild = await this.stringFromStorage('build');
 
-    if (defaultsAppVersion !== this.config.appVersion || defaultsBuild !== currentBuild) {
+    if (
+      defaultsAppVersion !== this.config.appVersion ||
+      defaultsBuild !== currentBuild
+    ) {
       await this.setInStorage('appVersion', this.config.appVersion);
       await this.setInStorage('build', currentBuild);
 
@@ -790,7 +809,9 @@ export class TAAnalytics implements AnalyticsProvider {
         this.config.automaticallyTrackedEventsPrefixConfig.eventPrefix
       );
     }
-    return event.eventBy(this.config.manuallyTrackedEventsPrefixConfig.eventPrefix);
+    return event.eventBy(
+      this.config.manuallyTrackedEventsPrefixConfig.eventPrefix
+    );
   }
 
   /**
@@ -876,5 +897,16 @@ export class TAAnalytics implements AnalyticsProvider {
   private async boolFromStorage(key: string) {
     const value = await this.objectFromStorage<boolean>(key);
     return value ?? false;
+  }
+
+  /**
+   * Restore persisted user id (if any) into adaptors after they start.
+   */
+  private async restoreUserIDFromStorage() {
+    const persistedUserID = await this.stringFromStorage(USER_ID_STORAGE_KEY);
+    if (persistedUserID === null) {
+      return;
+    }
+    this.userID = persistedUserID;
   }
 }
