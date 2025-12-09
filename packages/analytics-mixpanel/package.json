@@ -1,6 +1,6 @@
 {
   "name": "@techartists/react-native-ta-analytics-adaptor-mixpanel",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Mixpanel adaptor for @techartists/react-native-ta-analytics.",
   "license": "MIT",
   "author": "Tataru Robert <robert.tataru98@gmail.com> (https://github.com/tataruRobert)",

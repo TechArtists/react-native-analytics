@@ -1,6 +1,6 @@
 {
   "name": "@techartists/react-native-ta-analytics-adaptor-firebase",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Firebase Analytics adaptor (with optional Crashlytics logging) for @techartists/react-native-ta-analytics.",
   "license": "MIT",
   "author": "Tataru Robert <robert.tataru98@gmail.com> (https://github.com/tataruRobert)",
