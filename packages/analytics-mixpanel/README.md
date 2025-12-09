@@ -1,10 +1,10 @@
-# @react-native-ta-analytics/adaptor-mixpanel
+# @techartists/react-native-ta-analytics-adaptor-mixpanel
 
-Mixpanel adaptor for `react-native-ta-analytics`. Forwards events/user properties to Mixpanel and supports setting the Mixpanel distinct id.
+Mixpanel adaptor for `@techartists/react-native-ta-analytics`. Forwards events/user properties to Mixpanel and supports setting the Mixpanel distinct id.
 
 ## Install
 ```sh
-npm install @react-native-ta-analytics/adaptor-mixpanel mixpanel-react-native
+npm install @techartists/react-native-ta-analytics-adaptor-mixpanel mixpanel-react-native
 ```
 
 ## Usage
@@ -13,8 +13,8 @@ import {
   ConsoleAnalyticsAdaptor,
   TAAnalytics,
   TAAnalyticsConfig,
-} from 'react-native-ta-analytics';
-import { MixpanelAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-mixpanel';
+} from '@techartists/react-native-ta-analytics';
+import { MixpanelAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-mixpanel';
 
 const analytics = new TAAnalytics(
   new TAAnalyticsConfig({

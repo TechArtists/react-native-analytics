@@ -7,12 +7,12 @@ import {
   TAAnalytics,
   TAAnalyticsConfig,
   ViewAnalyticsModel,
-} from 'react-native-ta-analytics';
+} from '@techartists/react-native-ta-analytics';
 import {
   FirebaseAnalyticsAdaptor,
   FirebaseCrashlyticsAdaptor,
-} from '@react-native-ta-analytics/adaptor-firebase';
-import { MixpanelAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-mixpanel';
+} from '@techartists/react-native-ta-analytics-adaptor-firebase';
+import { MixpanelAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-mixpanel';
 
 const MIXPANEL_TOKEN = ''; // set your Mixpanel token to enable the Mixpanel adaptor.
 const ENABLE_CRASHLYTICS = false; // flip to true after adding Firebase config to the example app.

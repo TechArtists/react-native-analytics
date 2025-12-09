@@ -3,7 +3,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {
   EventAnalyticsModelTrimmed,
   UserPropertyAnalyticsModelTrimmed,
-} from 'react-native-ta-analytics';
+} from '@techartists/react-native-ta-analytics';
 import type {
   AnalyticsAdaptor,
   AnalyticsAdaptorWithReadOnlyUserPseudoID,
@@ -13,7 +13,7 @@ import type {
   EventAnalyticsModel,
   InstallType,
   UserPropertyAnalyticsModel,
-} from 'react-native-ta-analytics';
+} from '@techartists/react-native-ta-analytics';
 
 type AnalyticsParamValue = string | number | boolean;
 

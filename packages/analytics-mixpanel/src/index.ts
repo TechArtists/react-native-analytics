@@ -2,7 +2,7 @@ import { Mixpanel } from 'mixpanel-react-native';
 import {
   EventAnalyticsModelTrimmed,
   UserPropertyAnalyticsModelTrimmed,
-} from 'react-native-ta-analytics';
+} from '@techartists/react-native-ta-analytics';
 import type {
   AnalyticsAdaptor,
   AnalyticsAdaptorWithWriteOnlyUserID,
@@ -11,7 +11,7 @@ import type {
   EventAnalyticsModel,
   InstallType,
   UserPropertyAnalyticsModel,
-} from 'react-native-ta-analytics';
+} from '@techartists/react-native-ta-analytics';
 
 type MixpanelWithFlush = Mixpanel & { setFlushInterval?: (n: number) => void };
 

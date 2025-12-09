@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@react-native-ta-analytics/adaptor-firebase": ["./src/index"],
-      "react-native-ta-analytics": ["../core/src/index"]
+      "@techartists/react-native-ta-analytics-adaptor-firebase": ["./src/index"],
+      "@techartists/react-native-ta-analytics": ["../core/src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

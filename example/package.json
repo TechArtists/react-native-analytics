@@ -18,10 +18,10 @@
     "@react-native-firebase/analytics": "^18.9.0",
     "@react-native-firebase/app": "^18.9.0",
     "@react-native-firebase/crashlytics": "^18.9.0",
-    "@react-native-ta-analytics/adaptor-firebase": "0.1.0",
-    "@react-native-ta-analytics/adaptor-mixpanel": "0.1.0",
+    "@techartists/react-native-ta-analytics-adaptor-firebase": "0.1.1",
+    "@techartists/react-native-ta-analytics-adaptor-mixpanel": "0.1.1",
     "mixpanel-react-native": "^3.1.2",
-    "react-native-ta-analytics": "0.1.0",
+    "@techartists/react-native-ta-analytics": "0.1.1",
     "react": "18.2.0",
     "react-native": "0.72.6"
   },

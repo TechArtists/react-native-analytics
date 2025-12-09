@@ -1,6 +1,6 @@
 {
-  "name": "react-native-ta-analytics",
-  "version": "0.1.0",
+  "name": "@techartists/react-native-ta-analytics",
+  "version": "0.1.1",
   "description": "Modular TA analytics orchestrator for React Native with pluggable adaptors.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -37,7 +37,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/TechArtists/react-native-ta-analytics.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechArtists/react-native-ta-analytics.git"
+  },
   "author": "Tataru Robert <robert.tataru98@gmail.com> (https://github.com/tataruRobert)",
   "license": "MIT",
   "bugs": {
@@ -45,7 +48,8 @@
   },
   "homepage": "https://github.com/TechArtists/react-native-ta-analytics.git#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0"

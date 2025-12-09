@@ -2,13 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@react-native-ta-analytics/adaptor-mixpanel": ["./src/index"],
-      "react-native-ta-analytics": ["../core/src/index"]
+      "@techartists/react-native-ta-analytics-adaptor-mixpanel": ["./src/index"],
+      "@techartists/react-native-ta-analytics": ["../core/src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["esnext"],

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react-native-ta-analytics": ["./src/index"]
+      "@techartists/react-native-ta-analytics": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

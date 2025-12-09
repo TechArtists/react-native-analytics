@@ -1,10 +1,10 @@
-# @react-native-ta-analytics/adaptor-firebase
+# @techartists/react-native-ta-analytics-adaptor-firebase
 
-Firebase Analytics adaptor for `react-native-ta-analytics`, plus an optional Crashlytics logging adaptor.
+Firebase Analytics adaptor for `@techartists/react-native-ta-analytics`, plus an optional Crashlytics logging adaptor.
 
 ## Install
 ```sh
-npm install @react-native-ta-analytics/adaptor-firebase @react-native-firebase/app @react-native-firebase/analytics
+npm install @techartists/react-native-ta-analytics-adaptor-firebase @react-native-firebase/app @react-native-firebase/analytics
 # If you also want the Crashlytics logging adaptor:
 npm install @react-native-firebase/crashlytics
 ```
@@ -15,8 +15,8 @@ import {
   ConsoleAnalyticsAdaptor,
   TAAnalytics,
   TAAnalyticsConfig,
-} from 'react-native-ta-analytics';
-import { FirebaseAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-firebase';
+} from '@techartists/react-native-ta-analytics';
+import { FirebaseAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-firebase';
 
 const analytics = new TAAnalytics(
   new TAAnalyticsConfig({

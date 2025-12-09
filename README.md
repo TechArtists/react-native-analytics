@@ -1,30 +1,67 @@
-# react-native-ta-analytics
+# @techartists/react-native-ta-analytics
 
 Monorepo for the TAAnalytics React Native SDK with pluggable adaptors.
 
 ## Packages
-- `react-native-ta-analytics` (packages/core): core event buffer, predefined events/user properties, adaptor interface, and helpers.
-- `@react-native-ta-analytics/adaptor-firebase` (packages/analytics-firebase): Firebase Analytics adaptor (trims names/params, guards reserved names, exposes userID/appInstanceID) plus an optional Crashlytics logging adaptor.
-- `@react-native-ta-analytics/adaptor-mixpanel` (packages/analytics-mixpanel): sends events/user properties to Mixpanel and forwards `userID` to `identify`/`reset`.
+- `@techartists/react-native-ta-analytics` (packages/core): core event buffer, predefined events/user properties, adaptor interface, and helpers.
+- `@techartists/react-native-ta-analytics-adaptor-firebase` (packages/analytics-firebase): Firebase Analytics adaptor (trims names/params, guards reserved names, exposes userID/appInstanceID) plus an optional Crashlytics logging adaptor.
+- `@techartists/react-native-ta-analytics-adaptor-mixpanel` (packages/analytics-mixpanel): sends events/user properties to Mixpanel and forwards `userID` to `identify`/`reset`.
 
 ## Install
 Core (required):
 ```sh
-npm install react-native-ta-analytics @react-native-async-storage/async-storage
+npm install @techartists/react-native-ta-analytics @react-native-async-storage/async-storage
 ```
 > AsyncStorage must be in your app's `package.json` for React Native autolinking. Without it, the SDK falls back to in-memory storage and counters reset every cold start.
 
 Firebase Analytics adaptor (optional):
 ```sh
-npm install @react-native-ta-analytics/adaptor-firebase @react-native-firebase/app @react-native-firebase/analytics
+npm install @techartists/react-native-ta-analytics-adaptor-firebase @react-native-firebase/app @react-native-firebase/analytics
 # If you also want Crashlytics logging support from the same package:
 npm install @react-native-firebase/crashlytics
 ```
 
 Mixpanel adaptor (optional):
 ```sh
-npm install @react-native-ta-analytics/adaptor-mixpanel mixpanel-react-native
+npm install @techartists/react-native-ta-analytics-adaptor-mixpanel mixpanel-react-native
 ```
+
+## Integrate in your app
+1. Install packages you need (core required, adaptors optional) using the commands above. Make sure `@react-native-async-storage/async-storage` is in your app `package.json` so autolinking picks it up.
+2. iOS: run `cd ios && pod install` after adding deps. Firebase users must add `GoogleService-Info.plist`; Mixpanel has no extra native setup.
+3. Android: ensure Firebase `google-services.json` is configured if you use Firebase; otherwise no extra steps for core or Mixpanel.
+4. Initialize analytics early (e.g., app bootstrap):
+```ts
+import {
+  ConsoleAnalyticsAdaptor,
+  TAAnalytics,
+  TAAnalyticsConfig,
+  Events,
+  ViewAnalyticsModel,
+} from '@techartists/react-native-ta-analytics';
+import { FirebaseAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-firebase';
+import { MixpanelAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-mixpanel';
+
+const analytics = new TAAnalytics(
+  new TAAnalyticsConfig({
+    analyticsVersion: '1.0.0',
+    adaptors: [
+      new ConsoleAnalyticsAdaptor(),
+      new FirebaseAnalyticsAdaptor(), // optional
+      new MixpanelAnalyticsAdaptor('YOUR_TOKEN'), // optional
+    ],
+    appVersion: '1.0.0',
+    buildNumber: '1',
+    enableAppLifecycleEvents: true,
+  })
+);
+
+await analytics.start();
+await analytics.track(Events.ENGAGEMENT, { name: 'demo' });
+await analytics.trackViewShow(new ViewAnalyticsModel('home'));
+analytics.userID = 'user-123';
+```
+5. Crashlytics logging (optional): add `new FirebaseCrashlyticsAdaptor()` from the Firebase adaptor package to the `adaptors` array once Crashlytics is configured.
 
 ## Quick start
 ```ts
@@ -34,9 +71,9 @@ import {
   TAAnalytics,
   TAAnalyticsConfig,
   ViewAnalyticsModel,
-} from 'react-native-ta-analytics';
-import { FirebaseAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-firebase';
-import { MixpanelAnalyticsAdaptor } from '@react-native-ta-analytics/adaptor-mixpanel';
+} from '@techartists/react-native-ta-analytics';
+import { FirebaseAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-firebase';
+import { MixpanelAnalyticsAdaptor } from '@techartists/react-native-ta-analytics-adaptor-mixpanel';
 
 const analytics = new TAAnalytics(
   new TAAnalyticsConfig({
