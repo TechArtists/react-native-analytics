@@ -14,6 +14,14 @@ export const Events = {
   ENGAGEMENT_PRIMARY: new EventAnalyticsModel('engagement_primary', true),
   ONBOARDING_ENTER: new EventAnalyticsModel('onboarding_enter', true),
   ONBOARDING_EXIT: new EventAnalyticsModel('onboarding_exit', true),
+  ONBOARDING_QUESTIONNAIRE_ENTER: new EventAnalyticsModel(
+    'onboarding_questionnaire_enter',
+    true
+  ),
+  ONBOARDING_QUESTIONNAIRE_EXIT: new EventAnalyticsModel(
+    'onboarding_questionnaire_exit',
+    true
+  ),
   ACCOUNT_SIGNUP_ENTER: new EventAnalyticsModel('account_signup_enter', true),
   ACCOUNT_SIGNUP_EXIT: new EventAnalyticsModel('account_signup_exit', true),
   PAYWALL_ENTER: new EventAnalyticsModel('paywall_show', true),

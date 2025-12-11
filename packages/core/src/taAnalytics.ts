@@ -302,6 +302,14 @@ export class TAAnalytics implements AnalyticsProvider {
     await this.track(Events.ONBOARDING_EXIT, extraParams);
   }
 
+  async trackOnboardingQuestionnaireEnter(extraParams?: AnalyticsParams) {
+    await this.track(Events.ONBOARDING_QUESTIONNAIRE_ENTER, extraParams);
+  }
+
+  async trackOnboardingQuestionnaireExit(extraParams?: AnalyticsParams) {
+    await this.track(Events.ONBOARDING_QUESTIONNAIRE_EXIT, extraParams);
+  }
+
   /**
    * Track account signup entry/exit with optional signup method.
    */
