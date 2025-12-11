@@ -85,8 +85,14 @@ await analytics.trackButtonTap('subscribe', new ViewAnalyticsModel('paywall'));
 - `trackPaywallEnter/Exit/PurchaseTap`
 - `trackSubscriptionStartIntro/PaidRegular/New/Restore`
 - `trackEngagement` / `trackEngagementPrimary`
-- `trackOnboardingEnter/Exit`, `trackAccountSignupEnter/Exit`
+- `trackOnboardingEnter/Exit`, `trackOnboardingQuestionnaireEnter/Exit`, `trackAccountSignupEnter/Exit`
 - `trackErrorEvent`, `trackErrorCorrectedEvent`, `trackDebugEvent`
+
+### Suggested onboarding/paywall flow
+- `onboarding_enter` (start of onboarding; `onboarding_exit` when the user reaches the home screen)
+- `onboarding_questionnaire_enter` / `onboarding_questionnaire_exit` around the question stack
+- `paywall_enter` / `paywall_exit`
+- `account_signup_enter` / `account_signup_exit`
 
 ## Storage
 A simple in-memory store ships by default, but if `@react-native-async-storage/async-storage` is available it will be used automatically. Add it directly to your app (RN autolinking only scans your app's `package.json`) or inject your own `StorageAdapter` (wrapping AsyncStorage, MMKV, etc.) to persist lifetime counters and user properties across launches.
