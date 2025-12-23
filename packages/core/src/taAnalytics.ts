@@ -421,6 +421,28 @@ export class TAAnalytics implements AnalyticsProvider {
     await this.track(Events.SUBSCRIPTION_RESTORE, params);
   }
 
+  async trackPurchaseNonConsumableOneTime(
+    sub: TASubscriptionStartAnalytics
+  ) {
+    const params: AnalyticsParams = {};
+    addSubscriptionParams(params, sub);
+    await this.track(Events.PURCHASE_NON_CONSUMABLE_ONE_TIME, params);
+    await this.trackPurchaseNew(sub);
+  }
+
+  async trackPurchaseConsumable(sub: TASubscriptionStartAnalytics) {
+    const params: AnalyticsParams = {};
+    addSubscriptionParams(params, sub);
+    await this.track(Events.PURCHASE_CONSUMABLE, params);
+    await this.trackPurchaseNew(sub);
+  }
+
+  async trackPurchaseNew(sub: TASubscriptionStartAnalytics) {
+    const params: AnalyticsParams = {};
+    addSubscriptionParams(params, sub);
+    await this.track(Events.PURCHASE_NEW, params);
+  }
+
   /**
    * Track engagement; when possible attach last-view context.
    */

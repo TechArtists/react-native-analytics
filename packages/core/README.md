@@ -83,10 +83,15 @@ await analytics.trackButtonTap('subscribe', new ViewAnalyticsModel('paywall'));
 ## Built-in helpers
 - `trackViewShow`, `trackSecondaryViewShow`, `trackButtonTap`
 - `trackPaywallEnter/Exit/PurchaseTap`
-- `trackSubscriptionStartIntro/PaidRegular/New/Restore`
+- `trackSubscriptionStartIntro/PaidRegular/New`, `trackSubscriptionRestore`
+- `trackPurchaseNonConsumableOneTime/Consumable/New`
 - `trackEngagement` / `trackEngagementPrimary`
 - `trackOnboardingEnter/Exit`, `trackOnboardingQuestionnaireEnter/Exit`, `trackAccountSignupEnter/Exit`
 - `trackErrorEvent`, `trackErrorCorrectedEvent`, `trackDebugEvent`
+
+### Purchase/subscription event payload
+- Events: `subscription_start_intro`, `subscription_start_paid_regular`, `subscription_start_new`, `subscription_restore`, `purchase_non_consumable_one_time`, `purchase_consumable`, `purchase_new` (automatically sent alongside either purchase event).
+- Params (shared): `placement` (string), `product_id` (string), `type` (`trial`, `paid intro pay as you go`, `paid intro pay up front`, `paid regular`, or custom string), `paywall_id?` (string), `paywall_name?` (string), `value` (float), `price` (float), `currency` (string), `quantity` (always `1`).
 
 ### Suggested onboarding/paywall flow
 - `onboarding_enter` (start of onboarding; `onboarding_exit` when the user reaches the home screen)

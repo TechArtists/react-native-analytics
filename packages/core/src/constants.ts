@@ -28,22 +28,22 @@ export const Events = {
   PAYWALL_EXIT: new EventAnalyticsModel('paywall_exit', true),
   PAYWALL_PURCHASE_TAP: new EventAnalyticsModel('paywall_purchase_tap', true),
   SUBSCRIPTION_START_INTRO: new EventAnalyticsModel(
-    'subscripton_start_intro',
+    'subscription_start_intro',
     true
   ),
   SUBSCRIPTION_START_PAID_REGULAR: new EventAnalyticsModel(
-    'subscripton_start_paid_regular',
+    'subscription_start_paid_regular',
     true
   ),
   SUBSCRIPTION_START_NEW: new EventAnalyticsModel(
-    'subscripton_start_new',
+    'subscription_start_new',
     true
   ),
-  SUBSCRIPTION_RESTORE: new EventAnalyticsModel('subscripton_restore', true),
-  ATT_PROMPT_NOT_ALLOWED: new EventAnalyticsModel(
-    'att_prompt_not_allowed',
-    true
-  ),
+  SUBSCRIPTION_RESTORE: new EventAnalyticsModel('subscription_restore', true),
+  PURCHASE_NON_CONSUMABLE_ONE_TIME: new EventAnalyticsModel('purchase_non_consumable_one_time', true),
+  PURCHASE_CONSUMABLE: new EventAnalyticsModel('purchase_consumable', true),
+  PURCHASE_NEW: new EventAnalyticsModel('purchase_new', true),
+  ATT_PROMPT_NOT_ALLOWED: new EventAnalyticsModel('att_prompt_not_allowed', true),
   ATT_PROMPT_SHOW: new EventAnalyticsModel('att_prompt_show', true),
   ATT_PROMPT_TAP_ALLOW: new EventAnalyticsModel('att_prompt_tap_allow', true),
   ATT_PROMPT_TAP_DENY: new EventAnalyticsModel('att_prompt_tap_deny', true),
